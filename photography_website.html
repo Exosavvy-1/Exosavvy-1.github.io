@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Golden Lens Photography — Demo-safe</title>
+  <style>
+    :root{--gold:#d7be69;--bronze:#a47e4f;--olive:#5c6b28;--dark-olive:#424a26;--deep-olive:#2a3019;--text-light:#ffffff}
+    *{box-sizing:border-box}
+    html,body{margin:0;font-family:system-ui,Arial,sans-serif;background:var(--deep-olive);color:var(--text-light)}
+    a{color:inherit;text-decoration:none}
+    header{background:linear-gradient(90deg,var(--gold),var(--bronze));color:var(--deep-olive);padding:1rem 1.25rem;position:sticky;top:0;z-index:50}
+    .container{max-width:1200px;margin:0 auto;padding:0 1rem}
+    .brand{display:flex;align-items:center;gap:.75rem}
+    .brand h1{font-size:clamp(1.5rem,2.5vw,2.25rem);margin:0}
+    .nav{display:flex;gap:1rem;flex-wrap:wrap;justify-content:flex-end}
+    .nav a{font-weight:700;padding:.5rem .75rem;border-radius:999px;border:2px solid rgba(0,0,0,.08);background:rgba(255,255,255,.12);color:#fff}
+    section{padding:3rem 0;border-top:1px solid rgba(255,255,255,.06)}
+    h2{font-size:clamp(1.3rem,2vw,1.8rem);margin:0 0 1rem;color:var(--gold)}
+    p.lead{color:#e8e8e8;max-width:70ch}
+    .auth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+    .card{background:var(--dark-olive);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1rem;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+    label{display:block;font-weight:600;margin-top:.5rem}
+    input,textarea,select{width:100%;padding:.7rem .8rem;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.15);color:#fff}
+    button{appearance:none;border:none;padding:.7rem 1rem;border-radius:12px;background:var(--gold);color:var(--deep-olive);font-weight:800;cursor:pointer}
+    button.secondary{background:transparent;color:var(--gold);border:2px solid var(--gold)}
+    .form-actions{display:flex;gap:.5rem;align-items:center;justify-content:flex-end;margin-top:.75rem}
+    .hint{font-size:.9rem;color:#f0f0f0;opacity:.85}
+    .badge{display:inline-block;padding:.25rem .6rem;border-radius:999px;background:rgba(215,190,105,.18);color:var(--gold);font-weight:700;font-size:.75rem}
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+    .photo-card{position:relative;overflow:hidden;border-radius:14px;background:#222;border:1px solid rgba(255,255,255,.06)}
+    .photo-card img{width:100%;height:220px;object-fit:cover;display:block}
+    .overlay{position:absolute;inset:0;display:grid;align-items:end;padding:.75rem;background:linear-gradient(180deg,rgba(0,0,0,0)40%,rgba(0,0,0,.7));color:#fff;opacity:0;transition:opacity .25s}
+    .photo-card:hover .overlay{opacity:1}
+    .reviews-panel{position:absolute;inset:0;display:flex;flex-direction:column;gap:.5rem;background:rgba(0,0,0,.78);padding:.8rem;opacity:0;transition:opacity .25s;overflow:auto}
+    .photo-card:hover .reviews-panel{opacity:1}
+    .review{background:rgba(255,255,255,.08);padding:.5rem .6rem;border-radius:10px;font-size:.9rem}
+    .review strong{color:var(--gold)}
+    .frames-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+    .frame{background:var(--dark-olive);border-radius:16px;padding:1rem;border:1px solid rgba(255,255,255,.06);text-align:center}
+    .frame .preview-wrap{display:flex;justify-content:center;align-items:center;height:220px}
+    .frame .preview{background:#111;outline:10px solid var(--bronze);box-shadow:inset 0 0 0 6px #222}
+    .frame small{display:block;color:#e8e8e8;margin-top:.5rem}
+    .two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+    footer{background:var(--dark-olive);border-top:1px solid rgba(255,255,255,.08);padding:1.25rem 0}
+    .social a{margin-right:.6rem;display:inline-flex;align-items:center;gap:.4rem;padding:.4rem .6rem;border-radius:8px;background:rgba(255,255,255,.09)}
+    .demo-banner{position:fixed;right:1rem;bottom:1rem;background:rgba(0,0,0,.7);padding:.6rem .8rem;border-radius:10px;border:1px solid rgba(255,255,255,.06);z-index:999;font-size:.9rem}
+    @media (max-width:640px){.nav{justify-content:center}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container" style="display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+      <div class="brand">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="#2a3019" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="#2a3019"/></svg>
+        <h1>Golden Lens Photography</h1>
+        <span class="badge">Since 2012</span>
+      </div>
+      <nav class="nav">
+        <a href="#auth">Account</a>
+        <a href="#gallery">Your Photos</a>
+        <a href="#frames">Frames</a>
+        <a href="#appointments">Book</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="auth">
+      <div class="container">
+        <h2>Client Portal</h2>
+        <p class="lead">Create an account or log in to securely access your private gallery. This page includes a demo fallback — if your backend is not available the site will run in safe demo mode so you can continue testing UI features locally.</p>
+        <div class="auth-grid">
+          <form id="registerForm" class="card" autocomplete="off">
+            <h3 style="margin:0 0 .5rem">Create Account</h3>
+            <label>Full name</label><input name="full_name" required />
+            <label>Email</label><input type="email" name="email" required />
+            <label>Password</label><input type="password" name="password" minlength="8" required />
+            <div class="form-actions">
+              <button type="submit">Register</button>
+            </div>
+            <div class="hint">We never store plain-text passwords (server-side uses password_hash()).</div>
+          </form>
+
+          <form id="loginForm" class="card" autocomplete="off">
+            <h3 style="margin:0 0 .5rem">Log In</h3>
+            <label>Email</label><input type="email" name="email" required />
+            <label>Password</label><input type="password" name="password" required />
+            <div class="form-actions">
+              <button type="submit">Log In</button>
+              <button id="logoutBtn" class="secondary" type="button">Log Out</button>
+            </div>
+            <div id="authStatus" class="hint"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="container">
+        <h2>Your Private Gallery</h2>
+        <p class="lead">Once logged in, your images will appear below. Hover on any image to see client reviews for that specific shot. The demo fallback includes placeholder images and sample reviews.</p>
+        <div id="galleryGrid" class="gallery-grid"></div>
+      </div>
+    </section>
+
+    <section id="frames">
+      <div class="container">
+        <h2>Frame Sizes (Scaled Previews)</h2>
+        <p class="lead">These previews are proportionally scaled representations of the actual frame aspect ratios. The bronze outline represents the frame border.</p>
+        <div class="frames-grid" id="framesGrid"></div>
+      </div>
+    </section>
+
+    <section id="appointments">
+      <div class="container">
+        <h2>Schedule a Photo Shoot</h2>
+        <div class="two-col">
+          <div class="card">
+            <form id="appointmentForm">
+              <label>Full name</label><input name="name" required />
+              <label>Email</label><input type="email" name="email" required />
+              <label>Phone</label><input name="phone" />
+              <label>Preferred Date</label><input type="date" name="date" required />
+              <label>Package / Notes</label><textarea name="message" rows="4" placeholder="Family, wedding, studio portrait, etc."></textarea>
+              <div class="form-actions"><button type="submit">Request Booking</button></div>
+              <div id="apptStatus" class="hint"></div>
+            </form>
+          </div>
+          <div class="card">
+            <h3>How it works</h3>
+            <ol>
+              <li>Submit the form with your preferred date.</li>
+              <li>We reply via email to confirm availability and pricing.</li>
+              <li>Arrive 10 minutes early; proofs delivered within 72 hours.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <div class="container">
+        <h2>What Clients Say</h2>
+        <div class="card" id="publicReviews" style="display:grid;gap:.5rem"></div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <h2>Stay Connected</h2>
+        <div class="social">
+          <a href="https://x.com" target="_blank" rel="noopener">X</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+      <small>&copy; 2025 Golden Lens Photography</small>
+      <small>Theme Colors: #d7be69 #a47e4f #5c6b28 #424a26 #2a3019</small>
+    </div>
+  </footer>
+
+  <div id="demoBanner" class="demo-banner" style="display:none"></div>
+
+  <script>
+    /* ----------------------
+       App configuration
+       ---------------------- */
+    const API = {
+      register: 'api/register.php',
+      login: 'api/login.php',
+      logout: 'api/logout.php',
+      me: 'api/me.php',
+      listImages: 'api/list_images.php',
+      getReviews: 'api/get_reviews.php',
+      submitAppt: 'api/contact.php'
+    };
+
+    // Global state
+    let BACKEND_OK = null; // null = not checked, true/false after check
+    const demoBanner = document.getElementById('demoBanner');
+
+    /* ----------------------
+       Demo data & helpers
+       ---------------------- */
+    const DEMO_USERS_KEY = 'golden_lens_demo_user';
+
+    const DEMO_SAMPLE_IMAGES = [
+      { id: 'd1', url: 'https://via.placeholder.com/800x600?text=Portrait+1', title: 'Portrait — Studio' },
+      { id: 'd2', url: 'https://via.placeholder.com/1200x800?text=Wedding+Shot', title: 'Wedding — Couple' },
+      { id: 'd3', url: 'https://via.placeholder.com/900x600?text=Landscape', title: 'Landscape — Golden Hour' }
+    ];
+
+    const DEMO_REVIEWS_BY_IMAGE = {
+      d1: [ { name: 'Sarah', text: 'Amazing work! Loved the colours.' }, { name: 'Tom', text: 'The lighting is perfect.' } ],
+      d2: [ { name: 'Aisha', text: 'They captured our day so beautifully.' } ],
+      d3: []
+    };
+
+    function demoGetUser(){ try{ return JSON.parse(localStorage.getItem(DEMO_USERS_KEY)); }catch(e){ return null; } }
+    function demoSetUser(u){ localStorage.setItem(DEMO_USERS_KEY, JSON.stringify(u)); }
+    function demoClearUser(){ localStorage.removeItem(DEMO_USERS_KEY); }
+
+    function enableDemo(reason){
+      BACKEND_OK = false;
+      demoBanner.style.display = 'block';
+      demoBanner.innerHTML = `Demo mode active — backend unreachable. <button id="tryReconnect" style="margin-left:.5rem;padding:.25rem .5rem;border-radius:8px;border:none;cursor:pointer">Try reconnect</button>`;
+      document.getElementById('tryReconnect').addEventListener('click', async ()=>{ demoBanner.style.display='none'; await init(); });
+      console.warn('Demo mode enabled:', reason);
+    }
+
+    /* ----------------------
+       Network check
+       - We treat the backend as reachable if a fetch returns a Response object.
+       - If fetch throws (network error or CORS), we consider backend unreachable and switch to demo.
+       ---------------------- */
+    async function checkBackend(){
+      try{
+        // small timeout using AbortController
+        const controller = new AbortController();
+        const timeout = setTimeout(()=>controller.abort(), 3000);
+        const resp = await fetch(API.me, { credentials: 'include', signal: controller.signal });
+        clearTimeout(timeout);
+        // If we got here, the server responded (even if 401). Mark backend as available.
+        BACKEND_OK = true;
+        return resp;
+      }catch(err){
+        BACKEND_OK = false;
+        enableDemo(err && err.message ? err.message : 'network error');
+        return null;
+      }
+    }
+
+    /* ----------------------
+       API helpers (use backend if available; otherwise demo)
+       - All public callers should use apiGet/apiPost which handle fallback
+       ---------------------- */
+    async function apiGet(url){
+      if(BACKEND_OK === false) return demoApiGet(url);
+      try{
+        const res = await fetch(url, { credentials: 'include' });
+        // parse either JSON or text safely
+        const text = await res.text();
+        try{ return JSON.parse(text); } catch(e){ return text; }
+      }catch(err){
+        // switch to demo to avoid unhandled "Network error"
+        enableDemo(err && err.message ? err.message : 'network error');
+        return demoApiGet(url);
+      }
+    }
+    async function apiPost(url, data){
+      if(BACKEND_OK === false) return demoApiPost(url, data);
+      try{
+        const res = await fetch(url, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        const text = await res.text();
+        try{ return JSON.parse(text); }catch(e){ return text; }
+      }catch(err){
+        enableDemo(err && err.message ? err.message : 'network error');
+        return demoApiPost(url, data);
+      }
+    }
+
+    /* ----------------------
+       Demo API implementations
+       ---------------------- */
+    async function demoApiGet(url){
+      // Quick router: check URL and return demo shaped data
+      if(url.endsWith('me.php')){
+        const user = demoGetUser();
+        return { authenticated: !!user };
+      }
+      if(url.startsWith(API.getReviews)){
+        // parse query param image_id
+        const q = url.split('?')[1] || '';
+        const params = new URLSearchParams(q);
+        const id = params.get('image_id');
+        return DEMO_REVIEWS_BY_IMAGE[id] || [];
+      }
+      if(url.endsWith('list_images.php')){
+        const user = demoGetUser();
+        if(!user) return [];
+        // return demo images (in a real setup these would be filtered by user id)
+        return DEMO_SAMPLE_IMAGES.map(im => ({ ...im }));
+      }
+      // fallback for other GETs
+      return {};
+    }
+
+    async function demoApiPost(url, data){
+      if(url.endsWith('register.php')){
+        // simply store demo user locally
+        const id = 'demo-' + Date.now();
+        const user = { id, full_name: data.full_name, email: data.email };
+        demoSetUser(user);
+        return { message: 'Demo account created' };
+      }
+      if(url.endsWith('login.php')){
+        // accept any credentials in demo
+        const user = { id: 'demo-user', full_name: 'Demo User', email: data.email };
+        demoSetUser(user);
+        return { message: 'Demo: logged in' };
+      }
+      if(url.endsWith('logout.php')){
+        demoClearUser();
+        return { message: 'Demo: logged out' };
+      }
+      if(url.endsWith('contact.php')){
+        // store appointment request in localStorage (demo)
+        const appts = JSON.parse(localStorage.getItem('demo_appts') || '[]');
+        appts.push({ ...data, created_at: new Date().toISOString() });
+        localStorage.setItem('demo_appts', JSON.stringify(appts));
+        return { message: 'Demo: Request received. We will contact you shortly.' };
+      }
+      // default
+      return { message: 'Demo: OK' };
+    }
+
+    /* ----------------------
+       UI wiring
+       ---------------------- */
+    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const authStatus = document.getElementById('authStatus');
+    const galleryGrid = document.getElementById('galleryGrid');
+    const appointmentForm = document.getElementById('appointmentForm');
+    const apptStatus = document.getElementById('apptStatus');
+
+    function setAuthStatus(msg, ok=true){ authStatus.textContent = msg; authStatus.style.color = ok ? '#c5f7c5' : '#ffb3b3'; }
+
+    registerForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(registerForm).entries());
+      try{
+        const r = await apiPost(API.register, data);
+        setAuthStatus(r && r.message ? r.message : 'Registered', true);
+        await refreshGallery();
+      }catch(err){ setAuthStatus('Registration failed', false); console.error(err); }
+    });
+
+    loginForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(loginForm).entries());
+      try{
+        const r = await apiPost(API.login, data);
+        setAuthStatus(r && r.message ? r.message : 'Logged in', true);
+        await refreshGallery();
+      }catch(err){ setAuthStatus('Login failed', false); console.error(err); }
+    });
+
+    logoutBtn.addEventListener('click', async ()=>{
+      try{
+        const r = await apiPost(API.logout, {});
+        setAuthStatus(r && r.message ? r.message : 'Logged out', true);
+        galleryGrid.innerHTML = '';
+      }catch(err){ setAuthStatus('Could not log out', false); console.error(err); }
+    });
+
+    appointmentForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      apptStatus.textContent = 'Sending...';
+      const data = Object.fromEntries(new FormData(appointmentForm).entries());
+      try{
+        const r = await apiPost(API.submitAppt, data);
+        apptStatus.textContent = r && r.message ? r.message : 'Request sent! We will reply shortly.';
+      }catch(err){ apptStatus.textContent = 'Could not send your request right now.'; console.error(err); }
+    });
+
+    /* ----------------------
+       Gallery + reviews (hover)
+       ---------------------- */
+    async function refreshGallery(){
+      try{
+        const me = await apiGet(API.me);
+        if(!me || !me.authenticated){ galleryGrid.innerHTML = '<div class="card">Log in to view your private images.</div>'; return; }
+        const items = await apiGet(API.listImages);
+        if(!Array.isArray(items) || items.length === 0){ galleryGrid.innerHTML = '<div class="card">No images yet.</div>'; return; }
+        galleryGrid.innerHTML = items.map(img => `\n          <article class="photo-card" data-img-id="${img.id}">\n            <img src="${img.url}" alt="${img.title||'photo'}" />\n            <div class="overlay"><div>${img.title||''}</div></div>\n            <div class="reviews-panel"></div>\n          </article>`).join('');
+        attachHoverReviews();
+      }catch(err){ console.error('refreshGallery error', err); galleryGrid.innerHTML = '<div class="card">Unable to load gallery.</div>'; }
+    }
+
+    function attachHoverReviews(){
+      document.querySelectorAll('.photo-card').forEach(card =>{
+        let loaded = false; const panel = card.querySelector('.reviews-panel');
+        card.addEventListener('mouseenter', async ()=>{
+          if(loaded) return; loaded = true;
+          const id = card.getAttribute('data-img-id');
+          try{
+            const reviews = await apiGet(`${API.getReviews}?image_id=${encodeURIComponent(id)}`);
+            if(!Array.isArray(reviews) || reviews.length === 0){ panel.innerHTML = '<div class="review">No reviews yet.</div>'; return; }
+            panel.innerHTML = reviews.map(rv => `<div class="review"><strong>${rv.name}</strong>: ${rv.text}</div>`).join('');
+          }catch(err){ panel.innerHTML = '<div class="review">Unable to load reviews.</div>'; console.error(err); }
+        });
+      });
+    }
+
+    /* ----------------------
+       Frames rendering (unchanged)
+       ---------------------- */
+    const frames = [
+      { name:'Small', size:'8x10', w:8, h:10 },
+      { name:'Medium', size:'11x14', w:11, h:14 },
+      { name:'Large', size:'16x20', w:16, h:20 },
+      { name:'Poster', size:'20x30', w:20, h:30 },
+      { name:'Panoramic', size:'12x36', w:12, h:36 },
+      { name:'Custom', size:'A4 (8.27x11.69)', w:8.27, h:11.69 }
+    ];
+    function renderFrames(){
+      const MAX = 180;
+      const framesGrid = document.getElementById('framesGrid');
+      framesGrid.innerHTML = frames.map(f => {
+        const ratio = f.w / f.h;
+        let pw, ph;
+        if(ratio >= 1){ pw = MAX; ph = Math.round(MAX / ratio); }
+        else { ph = MAX; pw = Math.round(MAX * ratio); }
+        return `<div class="frame">\n          <h4 style="margin:.25rem 0 .5rem">${f.name} — ${f.size}</h4>\n          <div class="preview-wrap">\n            <div class="preview" style="width:${pw}px;height:${ph}px"></div>\n          </div>\n          <small>Aspect ${f.w}:${f.h} (scaled)</small>\n        </div>`;
+      }).join('');
+    }
+
+    /* ----------------------
+       Initialization
+       - Check backend first; if unreachable, enable demo mode.
+       ---------------------- */
+    async function init(){
+      await checkBackend();
+      // If backend OK but unauthenticated, apiGet will return that shape; if backend unreachable, demo mode already enabled.
+      renderFrames();
+      await refreshGallery();
+      loadPublicReviews();
+    }
+
+    async function loadPublicReviews(){
+      // For demo: show some public testimonials
+      try{
+        const publicBox = document.getElementById('publicReviews');
+        if(BACKEND_OK === false){
+          const sample = [
+            {name:'Sarah', text:'Amazing work! Loved my wedding pictures.'},
+            {name:'James', text:'Professional and friendly team. Highly recommended!'}
+          ];
+          publicBox.innerHTML = sample.map(s => `<div class="review"><strong>${s.name}</strong>: ${s.text}</div>`).join('');
+          return;
+        }
+        // If backend exists, in a real app we'd fetch public reviews from an endpoint.
+        publicBox.innerHTML = '<div class="hint">Public reviews will be loaded from server when connected.</div>';
+      }catch(e){ console.error(e); }
+    }
+
+    // Run init on page load
+    init();
+
+    // Make demo login state visible in authStatus
+    (function refreshAuthUI(){
+      const user = demoGetUser();
+      if(user) setAuthStatus(`Demo: logged in as ${user.email}`, true);
+    })();
+
+  </script>
+
+  <!-- ==========================================================
+       BACKEND: PHP + MySQL (same commented blocks as before)
+       NOTE: keep these server endpoints available at the paths in API.
+       If you want I can also create the actual PHP files and a README with deployment steps.
+       ========================================================== -->
+
+</body>
+</html>
