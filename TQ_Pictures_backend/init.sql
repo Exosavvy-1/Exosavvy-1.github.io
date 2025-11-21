@@ -14,3 +14,11 @@ CREATE TABLE images (
     FOREIGN KEY (uploaded_for) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE SET NULL
 );
+
+INSERT INTO users (username, password, role)
+VALUES (
+    'admin',
+    -- password = TYra@5987 --
+    '$2b$10$aFPMlYU959chN.D5Ykbo9Obv8bBKcQdo39NsqsBXVgXgqCAdR6HlG',
+    'admin'
+);
