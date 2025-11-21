@@ -1,5 +1,6 @@
 <?php
-require 'db.php';
+require '../db.php';
+require '../helpers.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = trim($_POST["username"]);
