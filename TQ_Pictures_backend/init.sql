@@ -1,8 +1,10 @@
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255),
-    password VARCHAR(255),
-    role ENUM('admin','user') DEFAULT 'user'
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin','user') NOT NULL DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE images (
@@ -15,10 +17,11 @@ CREATE TABLE images (
     FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
-INSERT INTO users (username, password, role)
+INSERT INTO users (username, email, password, role)
 VALUES (
     'admin',
-    -- password = TYra@5987 --
+    'admin@TQPictures.com',
     '$2b$10$aFPMlYU959chN.D5Ykbo9Obv8bBKcQdo39NsqsBXVgXgqCAdR6HlG',
     'admin'
 );
+
