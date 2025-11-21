@@ -23,7 +23,7 @@ Organized structure for better workflow
 
 🎯 Purpose
 
-This platform was built to streamline how photography companies deliver finished work.
+This platform was built to streamline how TQ Pictures delivers finished work.
 Instead of sending images through email, USB, or cloud file links, clients receive:
 
 ✔ A personalized login
